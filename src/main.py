@@ -121,7 +121,7 @@ def generate_file(
     file_name = "{}.csv".format(name)
     file_path = p / file_name
 
-    if not file_path.exists():
+    if True or not file_path.exists():
         schema_dict = SCHEMA_TO_DICT[schema]
 
         with open(file_path, 'w', newline='') as file:
@@ -142,7 +142,9 @@ def generate_file(
                 if unique_fields[index]:
                     generated_unique_values[index] = set()
             
+            i = 0
             for index in range(1, count+1):
+                i += 1
                 random_pick = random.random()
                 add_randomness = random_pick < duplicate_ratio
                 if duplicate_ratio > 0 and len(generated_rows) > 0 and  add_randomness:
@@ -166,12 +168,13 @@ def generate_file(
                 
                 rows.append(row)
 
-                if index % 1000 == 0:
+                if i % 1000 == 0:
+                    print("writerrows ", i)
                     writer.writerows(rows)
                     rows = []
 
-                if index % 10000 == 0:
-                    print("{}/{}".format(index, count))
+                if i % 10000 == 0:
+                    print("{}/{}".format(i, count))
 
             writer.writerows(rows)
     else:
